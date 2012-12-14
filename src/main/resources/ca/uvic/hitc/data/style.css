@@ -1,0 +1,63 @@
+/*
+  Copyright (c) 2011 Michael Ruflin, André Locher, Claudia von Bastian.
+  
+  This file is part of Tatool.
+  
+  Tatool is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published 
+  by the Free Software Foundation, either version 3 of the License, or 
+  (at your option) any later version.
+  
+  Tatool is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License for more details.
+  
+  You should have received a copy of the GNU Lesser General Public License
+  along with Tatool. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+body { 
+font-size:62.5%;
+font-family:arial; 
+background-color: #ffffff; 
+padding: 20px;
+margin: 0;
+}
+
+div.title {
+font-size:1.7em; 
+font-weight:bold; 
+color:#cc3300;
+text-align:center;
+margin-top:20px;
+margin-bottom:20px;
+}
+
+div.text {
+font-size:1.5em; 
+text-align:left;
+margin-top:20px;
+text-align:center;
+}
+
+.highlight_black {
+color:#000000;
+font-weight:bold; 
+}
+
+.highlight_red {
+color:#cc3300;
+font-weight:bold; 
+}
+
+.highlight_big_red {
+color:#cc3300;
+font-weight:bold; 
+font-size:1.9em; 
+}
+
+p {
+text-align:center;
+font-size:1.5em;
+}

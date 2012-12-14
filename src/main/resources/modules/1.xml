@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2011 Michael Ruflin, André Locher, Claudia von Bastian.
+  
+  This file is part of Tatool.
+  
+  Tatool is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published 
+  by the Free Software Foundation, either version 3 of the License, or 
+  (at your option) any later version.
+  
+  Tatool is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License for more details.
+  
+  You should have received a copy of the GNU Lesser General Public License
+  along with Tatool. If not, see <http://www.gnu.org/licenses/>.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<import resource="classpath:tatool/extension/hitc-context.xml"/>
+
+	<!-- MODULE: PROPERTIES -->
+	<bean id="moduleProperties" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">
+			<map>
+				<entry key="module.name" value="Demo Module" />
+				<entry key="module.version" value="1.0" />
+				<entry key="module.author" value="Tatool" />
+				<entry key="module.description" value="Demo Module used to showcase the features of Tatool" />
+				<entry key="module.execution.display.classname" value="ch.tatool.core.display.swing.SwingExecutionDisplayProvider" />
+				<entry key="module.execution.initializer.classname" value="ch.tatool.core.module.initializer.SpringExecutorInitializer" />
+				<entry key="module.execution.display.regionsContainer" value="true" />
+				<entry key="module.scheduler.classname" value="ch.tatool.core.module.scheduler.AlwaysAllowModuleScheduler" />
+				<entry key="module.info.classname" value="ch.tatool.app.gui.ModuleInfoPanel" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- MODULE: EXPORTERS -->
+	<bean id="moduleExporters" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">
+			<map>
+				<entry key="serverExporter"> 
+					<ref bean="exporter"/> 
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++ -->
+	<!-- GENERAL SETTINGS -->
+	<!-- +++++++++++++++++++++++++++++++++++++++ -->
+
+	<!-- TASK ITERATOR -->
+	<bean id="taskIterator" class="ch.tatool.core.element.IteratedListSelector">
+		<!-- number of iterations -->
+		<property name="numIterations" value="10" />
+	</bean>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++ -->
+	<!-- MODULE HIERARCHY -->
+	<!-- +++++++++++++++++++++++++++++++++++++++ -->
+	<bean id="moduleHierarchy" class="ch.tatool.core.element.ListElement">
+
+		<property name="id" value="module" />
+
+		<property name="handlers">
+			<list>
+				<bean id="mainIterator" class="ch.tatool.core.element.IteratedListSelector" />
+				<bean class="ch.tatool.core.element.handler.pause.DefaultExecutionPauseHandler">
+					<!-- interval between elements in milliseconds -->
+					<property name="defaultInterElementPauseDuration" value="500" />
+				</bean>
+				<bean class="ch.tatool.core.element.handler.ExecutionFeedbackHandler" />
+				<bean class="ch.tatool.core.element.handler.StatusPanelStateHandler">
+					<property name="resetIds">
+						<list>
+							<util:constant static-field="ch.tatool.core.display.swing.status.StatusPanel.STATUS_PANEL_OUTCOME" />
+						</list>
+					</property>
+					<property name="enableIds">
+						<list>
+							<util:constant static-field="ch.tatool.core.display.swing.status.StatusPanel.STATUS_PANEL_TRIAL" />
+							<util:constant static-field="ch.tatool.core.display.swing.status.StatusPanel.STATUS_PANEL_LEVEL" />
+						</list>
+					</property>
+					<property name="phase">
+						<util:constant static-field="ch.tatool.exec.ExecutionPhase.PRE_PROCESS" />
+					</property>
+				</bean>
+			</list>
+		</property>
+
+		<property name="children">
+			<list>
+
+				<!-- INSTRUCTION TASK -->
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec" />
+					<property name="executable">
+						<bean class="ch.tatool.core.executable.HTMLExecutable">
+							<property name="id" value="instruction" />
+							<property name="base" value="/ca/uvic/hitc/data/" />
+							<property name="pages">
+								<list>
+									<value>instruction.htm</value>
+								</list>
+							</property>
+						</bean>
+					</property>
+				</bean>
+
+				<!-- DISPLAY STATUS PANEL -->
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="executable">
+						<bean
+							class="ch.tatool.core.display.swing.status.DefaultModuleStatusRegionConfigurator">
+							<property name="panels">
+								<list>
+									<util:constant static-field="ch.tatool.core.display.swing.status.StatusPanel.STATUS_PANEL_OUTCOME" />
+									<util:constant static-field="ch.tatool.core.display.swing.status.StatusPanel.STATUS_PANEL_TRIAL" />
+									<util:constant static-field="ch.tatool.core.display.swing.status.StatusPanel.STATUS_PANEL_LEVEL" />
+								</list>
+							</property>
+						</bean>
+					</property>
+				</bean>
+
+				<!-- MAIN TASK -->
+				<bean id="main" class="ch.tatool.core.element.ListElement">
+					<property name="id" value="main" />
+					<property name="handlers">
+						<list>
+							<ref bean="taskIterator" />
+						</list>
+					</property>
+
+					<property name="children">
+						<list>
+
+							<!-- DEMO TASK -->
+							<bean class="ch.tatool.core.element.ExecutableElement">
+								<property name="id" value="exec" />
+								<property name="handlers">
+									<list>
+										<bean class="ch.tatool.core.element.handler.TrialCountHandler" />
+										<bean class="ch.tatool.core.element.handler.DefaultTrialCountEvaluator" />
+										<bean class="ch.tatool.core.element.handler.timeout.DefaultVisualTimeoutHandler">
+											<property name="id" value="timer" />
+											<property name="defaultTimerDuration" value="2000" />
+										</bean>
+										<bean class="ch.tatool.core.element.handler.score.DefaultPointsAndLevelHandler" >
+											<property name="id" value="level" />
+											<property name="description" value="Demo Task" />
+											<property name="sampleSize" value="4" />
+											<property name="minThreshold" value="65" />
+											<property name="maxThreshold" value="85" />
+										</bean>
+										<bean class="ch.tatool.core.element.handler.score.UserFeedbackLevelListener" />
+									</list>
+								</property>
+								<property name="executable">
+									<bean class="ca.uvic.hitc.executable.MyExecutable">
+										<property name="id" value="demoTask" />
+									</bean>
+								</property>
+							</bean>
+
+						</list>
+					</property>
+				</bean>
+
+
+
+			</list>
+		</property>
+
+	</bean>
+
+</beans>

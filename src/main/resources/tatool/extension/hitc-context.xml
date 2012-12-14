@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Copyright 2012 Laura Chan
+
+This file is part of Heads in the Cloud Tatool Client.
+
+    Heads in the Cloud Tatool Client is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Heads in the Cloud Tatool Client for Heads in the Cloud is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Heads in the Cloud Tatool Client.  If not, see <http://www.gnu.org/licenses/>. 
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- Exporter for uploading results to the HitC server -->
+	<!-- Modules should reference this bean in their exporters definitions -->
+	<bean id="exporter" class="ch.tatool.app.export.ServerDataExporter"> 
+			<property name="incrementalExport" value="true" /> 
+			<property name="autoExport" value="true" /> 
+			<property name="url" value="http://hitc.herokuapp.com/upload" /> 
+	</bean>
+
+</beans>

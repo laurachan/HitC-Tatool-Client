@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Copyright 2012 Laura Chan
+
+This file is part of Heads in the Cloud Tatool Client.
+
+    Heads in the Cloud Tatool Client is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Heads in the Cloud Tatool Client for Heads in the Cloud is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Heads in the Cloud Tatool Client.  If not, see <http://www.gnu.org/licenses/>. 
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+		
+	<import resource="classpath:tatool/extension/hitc-context.xml" />
+
+	<!-- Module properties -->
+	<bean id="moduleProperties" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">
+			<map>
+				<entry key="module.name" value="Canada Trivia 1"/>
+				<entry key="module.version" value="0.1"/>
+				<entry key="module.author" value="Laura Chan"/>
+				<entry key="module.execution.display.classname" value="ch.tatool.core.display.swing.SwingExecutionDisplayProvider" />
+      			<entry key="module.execution.initializer.classname" value="ch.tatool.core.module.initializer.SpringExecutorInitializer" />
+      			<entry key="module.execution.display.regionsContainer" value="true" />
+      			<entry key="module.scheduler.classname" value="ch.tatool.core.module.scheduler.AlwaysAllowModuleScheduler" />
+      			<entry key="module.info.classname" value="ch.tatool.app.gui.ModuleInfoPanel" />
+			</map>
+		</property>
+	</bean>
+	
+	<!-- A bean for defining exporters for exporting results -->
+	<bean id="moduleExporters" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">
+			<map>
+				<!-- Exporter for uploading results to a Tatool Online server -->
+				<entry key="serverExporter"> 
+					<ref bean="exporter"/> 
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="moduleHierarchy" class="ch.tatool.core.element.ListElement">
+		<property name="id" value="Canada Trivia 1 module"/>
+		<property name="handlers">
+			<list>
+				<bean id="main_iterator" class="ch.tatool.core.element.IteratedListSelector" />
+			</list>
+		</property>
+		<property name="children">
+			<list>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="What is the capital of Canada?"/>
+							<constructor-arg>
+								<list>
+									<value>Toronto</value>
+									<value>Ottawa</value>
+									<value>Montreal</value>
+									<value>Vancouver</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="1"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="Which Canadian city has the largest population?"/>
+							<constructor-arg>
+								<list>
+									<value>Toronto</value>
+									<value>Vancouver</value>
+									<value>Winnipeg</value>
+									<value>Montreal</value>
+									<value>Edmonton</value>
+									<value>Calgary</value>
+									<value>Halifax</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="0"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="In what year did Confederation happen?"/>
+							<constructor-arg>
+								<list>
+									<value>1763</value>
+									<value>1791</value>
+									<value>1841</value>
+									<value>1867</value>
+									<value>1905</value>
+									<value>1949</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="3"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="Which of the following was NOT one of the first four provinces to join Canada?"/>
+							<constructor-arg>
+								<list>
+									<value>Nova Scotia</value>
+									<value>Ontario</value>
+									<value>Quebec</value>
+									<value>New Brunswick</value>
+									<value>Prince Edward Island</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="4"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="How many provinces and territories does Canada have?"/>
+							<constructor-arg>
+								<list>
+									<value>10</value>
+									<value>11</value>
+									<value>12</value>
+									<value>13</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="3"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="What is the approximate population of Canada?"/>
+							<constructor-arg>
+								<list>
+									<value>5 million</value>
+									<value>13 million</value>
+									<value>34 million</value>
+									<value>63 million</value>
+									<value>120 million</value>
+									<value>312 million</value>
+									<value>590 million</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="2"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="Which of the following is NOT one of Canada's official languages?"/>
+							<constructor-arg>
+								<list>
+									<value>Spanish</value>
+									<value>French</value>
+									<value>English</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="0"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="What symbol is on the Canadian flag?"/>
+							<constructor-arg>
+								<list>
+									<value>A beaver</value>
+									<value>A maple leaf</value>
+									<value>A Union Flag</value>
+									<value>A fleur-de-liys</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="1"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="Which prime minister was responsible for the adoption of the Canadian flag?"/>
+							<constructor-arg>
+								<list>
+									<value>Sir John A. Macdonald</value>
+									<value>Sir Wilfrid Laurier</value>
+									<value>Louis St. Laurent</value>
+									<value>John Diefenbaker</value>
+									<value>Lester B. Pearson</value>
+									<value>Pierre Elliot Trudeau</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="4"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="ch.tatool.core.element.ExecutableElement">
+					<property name="id" value="exec"/>
+					<property name="executable">
+						<bean class="ca.uvic.hitc.executable.MultipleChoiceQuestion">
+							<constructor-arg type="java.lang.String" value="Who was the first Prime Minister of Canada?"/>
+							<constructor-arg>
+								<list>
+									<value>Sir John A. MacDonald</value>
+									<value>Sir Wilfrid Laurier</value>
+									<value>Sir Robert L. Borden</value>
+									<value>William Lyon Mackenzie King</value>
+									<value>Pierre Elliot Trudeau</value>
+								</list>
+							</constructor-arg>
+							<constructor-arg type="int" value="0"/>
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+</beans>

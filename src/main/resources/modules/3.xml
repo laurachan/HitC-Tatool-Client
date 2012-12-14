@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Copyright 2012 Laura Chan
+
+This file is part of Heads in the Cloud Tatool Client.
+
+    Heads in the Cloud Tatool Client is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Heads in the Cloud Tatool Client for Heads in the Cloud is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Heads in the Cloud Tatool Client.  If not, see <http://www.gnu.org/licenses/>. 
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<import resource="classpath:tatool/extension/hitc-context.xml"/>
+
+	<!-- Module properties -->
+	<bean id="moduleProperties" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">
+			<map>
+				<entry key="module.name" value="Echo"/>
+				<entry key="module.version" value="0.1"/>
+				<entry key="module.author" value="Laura Chan"/>
+				<entry key="module.execution.display.classname" value="ch.tatool.core.display.swing.SwingExecutionDisplayProvider" />
+      			<entry key="module.execution.initializer.classname" value="ch.tatool.core.module.initializer.SpringExecutorInitializer" />
+      			<entry key="module.execution.display.regionsContainer" value="true" />
+      			<entry key="module.scheduler.classname" value="ch.tatool.core.module.scheduler.AlwaysAllowModuleScheduler" />
+      			<entry key="module.info.classname" value="ch.tatool.app.gui.ModuleInfoPanel" />
+			</map>
+		</property>
+	</bean>
+	
+	<!-- A bean for defining exporters for exporting results -->
+	<bean id="moduleExporters" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">
+			<map>
+				<entry key="serverExporter"> 
+					<ref bean="exporter"/> 
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="taskIterator" class="ch.tatool.core.element.IteratedListSelector">
+		<property name="numIterations" value="10"/>
+	</bean>
+	
+	<bean id="moduleHierarchy" class="ch.tatool.core.element.ListElement">
+		<property name="id" value="Echo module"/>
+		<property name="handlers">
+			<list>
+				<bean id="main_iterator" class="ch.tatool.core.element.IteratedListSelector" />
+			</list>
+		</property>
+		<!-- The stuff to execute -->
+		<property name="children"> 
+			<list>
+				<bean class="ch.tatool.core.element.ListElement">
+					<property name="id" value="main"/>
+					<property name="handlers">
+						<list>
+							<ref bean="taskIterator"/> <!-- Defines how many times this task should be executed? -->
+						</list>
+					</property>
+					<property name="children">
+						<list>
+							<bean class="ch.tatool.core.element.ExecutableElement">
+								<property name="id" value="exec"/>
+								<property name="executable">
+									<bean class="ca.uvic.hitc.executable.EchoExecutable">
+										<property name="id" value="echoTask"/>
+									</bean>
+								</property>
+							</bean>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+</beans>

@@ -64,10 +64,10 @@ public class EchoExecutable extends BlockingAWTExecutable implements ActionPanel
 		
 		questionPanel.setText("" + correctAnswer);
 		container.setRegionContent(Region.CENTER, questionPanel);
-		container.setRegionContentVisibility(Region.CENTER, true);
 		CenteredTextPanel instructionPanel = new CenteredTextPanel();
 		instructionPanel.setText("Type the number shown above.");
 		container.setRegionContent(Region.SOUTH, instructionPanel);
+		container.setRegionContentVisibility(Region.CENTER, true);
 		container.setRegionContentVisibility(Region.SOUTH, true);
 		
 		actionPanel.addKey(KeyEvent.VK_0, "0", 0);
@@ -90,6 +90,14 @@ public class EchoExecutable extends BlockingAWTExecutable implements ActionPanel
 	}
 
 	private void stop() {
+		// Don't just try to go straight to container.removeAllContent(), or next time
+		// the question text won't appear!
+		RegionsContainer container = ContainerUtils.getRegionsContainer();
+		container.setRegionContentVisibility(Region.CENTER, false);
+		container.setRegionContentVisibility(Region.SOUTH, false);
+		container.removeRegionContent(Region.CENTER);
+		container.removeRegionContent(Region.SOUTH);
+		
 		// This stuff has to do with recording trial data
 		Question.getQuestionProperty().setValue(this, "" + correctAnswer);
 		Question.getAnswerProperty().setValue(this, "" + correctAnswer);
@@ -98,14 +106,6 @@ public class EchoExecutable extends BlockingAWTExecutable implements ActionPanel
 		Points.setZeroOnePoints(this, correct);
 		Result.getResultProperty().setValue(this, correct);
 		DataUtils.storeProperties(currentTrial, this);
-		
-		// Don't just try to go straight to container.removeAllContent(), or next time
-		// the question text won't appear!
-		RegionsContainer container = ContainerUtils.getRegionsContainer();
-		container.setRegionContentVisibility(Region.CENTER, false);
-		container.setRegionContentVisibility(Region.SOUTH, false);
-		container.removeRegionContent(Region.CENTER);
-		container.removeRegionContent(Region.SOUTH);
 		
 		if (this.getFinishExecutionLock()) {
 			this.finishExecution();

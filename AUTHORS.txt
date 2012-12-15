@@ -1,0 +1,8 @@
+Authors of the HitC Tatool Client
+
+HitC Tatool Client implemented by Laura Chan 
+
+Michael Ruflin, André Locher, Claudia von Bastian: 
+	instruction.htm and MyExecutable.java
+	initial version of style.css and 1.xml (minor modifications for HitC made by Laura Chan)
+	
